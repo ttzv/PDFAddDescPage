@@ -21,7 +21,7 @@ public class PDFService {
 
 
 
-    public PDFService(File file) throws IOException {
+    public PDFService(File file) throws IOException, NullPointerException {
         fpdf = Loader.loadPDF(file);
         fpdfName = file.getName();
     }
@@ -30,7 +30,7 @@ public class PDFService {
         List<String> lines = getLines(description);
         PDPage page = new PDPage();
         fpdf.addPage(page);
-        PDFont font = PDType1Font.TIMES_ROMAN;
+        PDFont font = PDType0Font.load(fpdf, new File("C:/Windows/fonts/times.ttf")); //use Times New Roman font
         try (PDPageContentStream contents = new PDPageContentStream(fpdf, page)){
             contents.beginText();
             contents.setFont(font, 12);
