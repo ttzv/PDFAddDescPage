@@ -11,6 +11,7 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
@@ -18,12 +19,12 @@ public class PDFService {
 
     private final PDDocument fpdf;
     private final String fpdfName;
-
-
+    private String description;
 
     public PDFService(File file) throws IOException, NullPointerException {
         fpdf = Loader.loadPDF(file);
         fpdfName = file.getName();
+        description = "";
     }
 
     public void addDescription(String description) throws IOException {
@@ -42,13 +43,22 @@ public class PDFService {
                 contents.newLine();
             }
             contents.endText();
-
         }
-        fpdf.save(fpdfName + "-desc.pdf");
+    }
+
+    public void save(Path path) throws IOException {
+        String fileName = fpdfName + description + ".pdf";
+        fpdf.save(path.resolve(fileName).toString());
         fpdf.close();
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     private List<String> getLines(String string){
         return Arrays.asList(string.split("\\n"));
     }
+
+
 }

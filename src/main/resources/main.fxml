@@ -1,21 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.effect.Light.Distant?>
+<?import javafx.scene.effect.Lighting?>
+<?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="442.0" prefWidth="591.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fpdf.ui.MainController">
+<AnchorPane prefHeight="442.0" prefWidth="584.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fpdf.ui.MainController">
    <children>
-      <JFXButton buttonType="RAISED" layoutX="59.0" layoutY="57.0" onAction="#selectPdf" style="-fx-border-radius: 3px; -fx-background-color: #49b8e9; -fx-text-fill: white;" text="Wybierz..." />
-      <JFXTextArea fx:id="description" layoutX="59.0" layoutY="113.0" prefHeight="229.0" prefWidth="464.0" style="-fx-border-color: lightgray;" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="59.0" AnchorPane.rightAnchor="68.0" AnchorPane.topAnchor="113.0">
+      <JFXButton buttonType="RAISED" layoutX="59.0" layoutY="71.0" onAction="#selectPdf" style="-fx-border-radius: 3px; -fx-background-color: #49b8e9; -fx-text-fill: white;" text="Wybierz..." viewOrder="-1.0" />
+      <JFXTextArea fx:id="description" layoutX="59.0" layoutY="137.0" prefHeight="229.0" prefWidth="464.0" style="-fx-border-color: lightgray;" AnchorPane.bottomAnchor="76.0" AnchorPane.leftAnchor="59.0" AnchorPane.rightAnchor="68.0" AnchorPane.topAnchor="137.0">
          <padding>
             <Insets left="5.0" right="5.0" />
          </padding></JFXTextArea>
-      <ListView fx:id="filesDropArea" layoutX="143.0" layoutY="18.0" prefHeight="81.0" prefWidth="379.0" />
-      <JFXButton buttonType="RAISED" layoutX="59.0" layoutY="373.0" onAction="#describe" style="-fx-border-radius: 3px; -fx-background-color: #49b8e9; -fx-text-fill: white;" styleClass="button-raised" text="Opisz" AnchorPane.bottomAnchor="44.0" AnchorPane.leftAnchor="59.0" />
-      <ProgressBar layoutY="438.0" prefHeight="8.0" prefWidth="364.0" progress="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
+      <ListView fx:id="filesDropArea" layoutX="143.0" layoutY="31.0" prefHeight="81.0" prefWidth="379.0" AnchorPane.leftAnchor="143.0" AnchorPane.rightAnchor="69.0" />
+      <JFXButton buttonType="RAISED" layoutX="59.0" layoutY="386.0" onAction="#describe" style="-fx-border-radius: 3px; -fx-background-color: #49b8e9; -fx-text-fill: white;" styleClass="button-raised" text="Opisz" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="59.0" />
+      <ProgressBar fx:id="progressBar" layoutY="447.0" prefHeight="12.0" progress="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <effect>
+            <Lighting diffuseConstant="1.53" specularConstant="1.88" specularExponent="26.98">
+               <bumpInput>
+                  <Shadow />
+               </bumpInput>
+               <light>
+                  <Light.Distant />
+               </light>
+            </Lighting>
+         </effect></ProgressBar>
+      <JFXCheckBox fx:id="autoclearCbx" layoutX="545.0" layoutY="72.0" onAction="#handleAutoClear" prefHeight="18.0" prefWidth="0.0" text=" " AnchorPane.rightAnchor="10.0" />
+      <Label layoutX="534.0" layoutY="31.0" prefHeight="37.0" prefWidth="52.0" text="Autom. czyść" textAlignment="CENTER" wrapText="true" AnchorPane.rightAnchor="5.0" />
+      <JFXButton buttonType="RAISED" layoutX="389.0" layoutY="386.0" onAction="#selectSavePath" style="-fx-border-radius: 3px; -fx-background-color: #49b8e9; -fx-text-fill: white;" text="Zmień ścieżkę zapisu" viewOrder="-1.0" AnchorPane.bottomAnchor="31.0" AnchorPane.rightAnchor="68.0" />
    </children>
 </AnchorPane>
