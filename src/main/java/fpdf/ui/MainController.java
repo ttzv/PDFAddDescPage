@@ -3,14 +3,13 @@ package fpdf.ui;
 import com.jfoenix.controls.JFXCheckBox;
 import fpdf.config.Configuration;
 import fpdf.service.PDFService;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.ListView;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.input.DataFormat;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.TransferMode;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
@@ -29,6 +28,7 @@ public class MainController {
     public ListView<String> filesDropArea;
     public JFXCheckBox autoclearCbx;
     public ProgressBar progressBar;
+    public TextField suffix;
     private List<File> fileList;
 
     private Configuration configuration;
@@ -36,6 +36,8 @@ public class MainController {
     @FXML
     private void initialize(){
         initConfig();
+
+        suffix.setText(readSuffix());
 
         autoclearCbx.selectedProperty().setValue(willClearOnDragIn());
 
@@ -56,7 +58,7 @@ public class MainController {
         filesDropArea.setOnDragDropped(dragEvent -> {
             List<String> fileNames = fileList.stream().map(File::getName).collect(Collectors.toList());
             List<File> droppedFiles = dragEvent.getDragboard().getFiles().stream()
-                    .filter(file -> !fileNames.contains(file.getName()))
+                    .filter(file -> !fileNames.contains(file.getName()) && isPDF(file))
                     .collect(Collectors.toList());
             addFiles(droppedFiles, willClearOnDragIn());
             refreshDropArea();
@@ -69,7 +71,7 @@ public class MainController {
         if (inFolder != null){
             fileChooser.setInitialDirectory(inFolder.getParent().toFile());
         }
-        fileChooser.setSelectedExtensionFilter(new FileChooser.ExtensionFilter("PDF Files","*.pdf"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("PDF","*.pdf"));
         List<File> files = fileChooser.showOpenMultipleDialog(null);
         if (files != null){
             fileList.clear();
@@ -85,7 +87,6 @@ public class MainController {
             outFolder = chooseOutDir();
         }
         if(outFolder != null){
-            double i =.0;
             Path finalOutFolder = outFolder;
             Task<Void> describeTask = new Task<Void>(){
                 @Override
@@ -96,10 +97,11 @@ public class MainController {
                         try {
                             PDFService pdfService = new PDFService(fpdf);
                             pdfService.addDescription(description.getText());
+                            pdfService.setSuffix(readSuffix());
                             pdfService.save(finalOutFolder);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            showExceptionAlert(e);
+                            Platform.runLater( () -> showExceptionAlert(e) );
                             break;
                         }
                         index++;
@@ -142,7 +144,7 @@ public class MainController {
 
     private void showExceptionAlert(Exception e){
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText(e.getMessage());
+        alert.setContentText(e.toString());
         alert.showAndWait();
     }
 
@@ -150,6 +152,12 @@ public class MainController {
         String value = configuration.get().getProperty(Configuration.CLEAR_ON_DROP);
         if (value == null) return false;
         return value.equals("true");
+    }
+
+    private String readSuffix(){
+        String suffix = configuration.get().getProperty(Configuration.SUFFIX);
+        if (suffix != null) return suffix;
+        return "";
     }
 
     private Path getConfigFolder(String key){
@@ -188,5 +196,20 @@ public class MainController {
 
     public void selectSavePath(ActionEvent actionEvent) {
         chooseOutDir();
+    }
+
+    public void onSuffixChange(KeyEvent actionEvent) {
+        configuration.get().setProperty(Configuration.SUFFIX, suffix.getText());
+    }
+
+    private boolean isPDF(File file){
+        String contentType = null;
+        try {
+            contentType = Files.probeContentType(file.toPath());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(contentType == null) return false;
+        return contentType.equals("application/pdf");
     }
 }

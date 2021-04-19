@@ -11,6 +11,7 @@ public class Configuration {
     public static final String IN_PATH = "inPath";
     public static final String OUT_PATH = "outPath";
     public static final String CLEAR_ON_DROP = "clearOnDrop";
+    public static final String SUFFIX = "suffix";
 
     private final Path CONFIG_PATH = Paths.get(System.getProperty("user.dir"), "app", "conf", "fpdf.properties");
     private Properties properties;

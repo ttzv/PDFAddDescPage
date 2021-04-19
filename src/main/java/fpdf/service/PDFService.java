@@ -6,25 +6,24 @@ import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
-import org.apache.pdfbox.pdmodel.font.PDType1CFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 public class PDFService {
 
     private final PDDocument fpdf;
     private final String fpdfName;
-    private String description;
+    private String suffix;
 
     public PDFService(File file) throws IOException, NullPointerException {
         fpdf = Loader.loadPDF(file);
         fpdfName = file.getName();
-        description = "";
+        suffix = "";
     }
 
     public void addDescription(String description) throws IOException {
@@ -47,18 +46,24 @@ public class PDFService {
     }
 
     public void save(Path path) throws IOException {
-        String fileName = fpdfName + description + ".pdf";
+        String ext = getExtensionByStringHandling(fpdfName).get();
+        String name = fpdfName.substring(0, fpdfName.lastIndexOf(ext));
+        String fileName = name + suffix + ext;
         fpdf.save(path.resolve(fileName).toString());
         fpdf.close();
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setSuffix(String suffix) {
+        this.suffix = suffix;
     }
 
     private List<String> getLines(String string){
         return Arrays.asList(string.split("\\n"));
     }
 
-
+    public Optional<String> getExtensionByStringHandling(String filename) {
+        return Optional.ofNullable(filename)
+                .filter(f -> f.contains("."))
+                .map(f -> f.substring(filename.lastIndexOf(".")));
+    }
 }
