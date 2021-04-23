@@ -11,12 +11,18 @@
 <?import javafx.scene.effect.Lighting?>
 <?import javafx.scene.effect.Shadow?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 
 <AnchorPane prefHeight="442.0" prefWidth="581.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fpdf.ui.MainController">
    <children>
-      <JFXButton buttonType="RAISED" layoutX="59.0" layoutY="31.0" onAction="#selectPdf" style="-fx-border-radius: 3px; -fx-background-color: #49b8e9; -fx-text-fill: white;" text="Wybierz..." viewOrder="-1.0" />
+      <JFXButton buttonType="RAISED" layoutX="59.0" layoutY="31.0" onAction="#selectPdf" style="-fx-border-radius: 3px; -fx-background-color: #49b8e9; -fx-text-fill: white;" text="%select" viewOrder="-1.0" />
       <ListView fx:id="filesDropArea" layoutX="143.0" layoutY="31.0" prefHeight="81.0" prefWidth="379.0" AnchorPane.leftAnchor="143.0" AnchorPane.rightAnchor="60.0" />
-      <JFXButton buttonType="RAISED" layoutX="59.0" layoutY="386.0" onAction="#describe" style="-fx-border-radius: 3px; -fx-background-color: #49b8e9; -fx-text-fill: white;" styleClass="button-raised" text="Opisz" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="59.0" />
+      <HBox layoutX="47.0" layoutY="387.0" spacing="5.0" AnchorPane.bottomAnchor="30.0">
+         <children>
+            <JFXButton buttonType="RAISED" onAction="#describe" style="-fx-border-radius: 3px; -fx-background-color: #49b8e9; -fx-text-fill: white;" styleClass="button-raised" text="%describe" />
+            <JFXButton buttonType="RAISED" onAction="#selectSavePath" prefHeight="25.0" prefWidth="29.0" style="-fx-border-radius: 3px; -fx-background-color: #49b8e9; -fx-text-fill: white;" text="..." viewOrder="-1.0" />
+         </children>
+      </HBox>
       <ProgressBar fx:id="progressBar" layoutY="447.0" prefHeight="12.0" progress="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <effect>
             <Lighting diffuseConstant="1.53" specularConstant="1.88" specularExponent="26.98">
@@ -29,8 +35,7 @@
             </Lighting>
          </effect></ProgressBar>
       <JFXCheckBox fx:id="autoclearCbx" layoutX="110.0" layoutY="78.0" onAction="#handleAutoClear" prefHeight="18.0" prefWidth="0.0" text=" " AnchorPane.leftAnchor="110.0" />
-      <Label layoutX="56.0" layoutY="67.0" prefHeight="37.0" prefWidth="52.0" text="Autom. czyść" textAlignment="CENTER" wrapText="true" AnchorPane.leftAnchor="56.0" />
-      <JFXButton buttonType="RAISED" layoutX="112.0" layoutY="386.0" onAction="#selectSavePath" prefHeight="25.0" prefWidth="29.0" style="-fx-border-radius: 3px; -fx-background-color: #49b8e9; -fx-text-fill: white;" text="..." viewOrder="-1.0" AnchorPane.bottomAnchor="31.0" AnchorPane.leftAnchor="109.0" />
+      <Label layoutX="56.0" layoutY="67.0" prefHeight="37.0" prefWidth="52.0" text="%autoclear" textAlignment="CENTER" wrapText="true" AnchorPane.leftAnchor="56.0" />
       <TextField fx:id="suffix" layoutX="63.0" layoutY="344.0" onKeyTyped="#onSuffixChange" AnchorPane.bottomAnchor="73.0" AnchorPane.leftAnchor="60.0" />
       <TextArea fx:id="description" layoutX="59.0" layoutY="133.0" prefHeight="200.0" prefWidth="456.0" AnchorPane.bottomAnchor="109.0" AnchorPane.leftAnchor="60.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="133.0" />
    </children>

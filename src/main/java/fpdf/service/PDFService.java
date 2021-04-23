@@ -46,7 +46,7 @@ public class PDFService {
     }
 
     public void save(Path path) throws IOException {
-        String ext = getExtensionByStringHandling(fpdfName).get();
+        String ext = getExtensionByStringHandling(fpdfName).orElse("");
         String name = fpdfName.substring(0, fpdfName.lastIndexOf(ext));
         String fileName = name + suffix + ext;
         fpdf.save(path.resolve(fileName).toString());
